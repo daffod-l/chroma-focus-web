@@ -5,6 +5,10 @@ export default function Home() {
   const [isRunning, setIsRunning] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // states for dropdown sections
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+
   useEffect(() => {
     const savedTime = localStorage.getItem("timeLeft");
     if (savedTime) setTimeLeft(Number(savedTime));
@@ -73,23 +77,85 @@ export default function Home() {
           className={`fixed top-0 right-0 h-full w-64 bg-[#dfe1e8] shadow-lg p-4 z-40 transform transition-transform duration-300 ${
             menuOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          style={{ fontFamily: "AlteHaasGrotesk" }}
         >
           <button
             style={{ fontFamily: "DreamerTM", color: "#474e74ff" }}
-            className="mb-4 text-6xl"
+            className="mb-6 text-6xl"
             onClick={() => setMenuOpen(false)}
           >
             Menu
           </button>
 
-          <ul className="space-y-2">
-            <li>Menu Item 1</li>
-            <li>Menu Item 2</li>
-            <li>Menu Item 3</li>
-          </ul>
+          {/* SETTINGS DROPDOWN */}
+          <div className="mb-4">
+            <p
+              className="cursor-pointer text-lg font-bold text-[#211b94]"
+              onClick={() => setSettingsOpen(!settingsOpen)}
+            >
+              Settings
+            </p>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                settingsOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <p className="mt-2 pl-2">To be updated~</p>
+            </div>
+          </div>
+
+          {/* ABOUT DROPDOWN */}
+          <div>
+            <p
+              className="cursor-pointer text-lg font-bold text-[#211b94]"
+              onClick={() => setAboutOpen(!aboutOpen)}
+            >
+              About
+            </p>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                aboutOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="mt-2 pl-2">
+                <p className="mb-2 font-bold text-lg">What is Chroma?</p>
+                <p className="mb-2">
+                  Chroma is a simple study/focus timer I made as
+                  I was experimenting with the next.js framework. Enjoy!
+                </p>
+                <a
+                  href="https://instagram.com/jiayicosmos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: "AlteHaasGrotesk",
+                    color: "#2f1d6f",
+                    fontWeight: "bold",
+                  }}
+                  className="underline"
+                >
+                  My Instagram
+                </a>
+                <p></p>
+                <a
+                  href="https://www.youtube.com/watch?v=eHCYzIu-ij4&list=RDeHCYzIu-ij4&start_radio=1&ab_channel=PLAVE%ED%94%8C%EB%A0%88%EC%9D%B4%EB%B8%8C"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: "AlteHaasGrotesk",
+                    color: "#2f1d6f",
+                    fontWeight: "bold",
+                  }}
+                  className="underline"
+                >
+                  Background Credit
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* menu transition */}
+        {/* menu transition overlay */}
         <div
           onClick={() => setMenuOpen(false)}
           className={`fixed inset-0 backdrop-blur-[1px] transition-all duration-500 z-30 ${
