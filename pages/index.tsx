@@ -7,16 +7,29 @@ export default function Home() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [customOpen, setCustomOpen] = useState(false);
+  const [timerFont, setTimerFont] = useState<"DreamerTM" | "AlteHaasGrotesk">("DreamerTM");
 
+  // load timeLeft and timerFont from localStorage
   useEffect(() => {
     const savedTime = localStorage.getItem("timeLeft");
     if (savedTime) setTimeLeft(Number(savedTime));
+
+    const savedFont = localStorage.getItem("timerFont");
+    if (savedFont === "DreamerTM" || savedFont === "AlteHaasGrotesk") {
+      setTimerFont(savedFont);
+    }
   }, []);
 
+  // save timeLeft and timerFont to localStorage
   useEffect(() => {
     localStorage.setItem("timeLeft", timeLeft.toString());
   }, [timeLeft]);
 
+  useEffect(() => {
+    localStorage.setItem("timerFont", timerFont);
+  }, [timerFont]);
+
+  // timer countdown
   useEffect(() => {
     if (!isRunning) return;
     const interval = setInterval(() => {
@@ -56,21 +69,45 @@ export default function Home() {
 
       {/* customise sidebar */}
       <div
-        className={`fixed top-0 z-90 left-0 h-full w-72 bg-white rounded-r-3xl shadow-lg z-40 transform transition-transform duration-300 overflow-y-auto ${
+        className={`fixed top-0 z-90 left-0 h-full w-72 bg-white rounded-r-3xl shadow-lg transform transition-transform duration-300 overflow-y-auto ${
           customOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{ fontFamily: "AlteHaasGrotesk" }}
       >
         <div className="p-4">
           <h2
-            className="text-6xl mb-2"
-            style={{ fontFamily: "DreamerTM" , color: "#141729ff"}}
+            className="text-6xl mb-4"
+            style={{ fontFamily: "DreamerTM", color: "#141729ff" }}
           >
             Customise
           </h2>
-          <p className="mb-2">Placeholder option 1</p>
-          <p className="mb-2">Placeholder option 2</p>
-          <p className="mb-2">Placeholder option 3</p>
+
+          {/* timer style */}
+          <div className="mb-4">
+            <p className="mb-2 font-bold text-lg">Timer Style</p>
+            <div className="space-y-2">
+              <button
+                onClick={() => setTimerFont("DreamerTM")}
+                className={`w-full text-left px-3 py-2 rounded-lg border ${
+                  timerFont === "DreamerTM"
+                    ? "border-[#47338a] bg-[#d2cce6] font-bold"
+                    : "border-gray-300 font-normal"
+                }`}
+              >
+                Dream
+              </button>
+              <button
+                onClick={() => setTimerFont("AlteHaasGrotesk")}
+                className={`w-full text-left px-3 py-2 rounded-lg border ${
+                  timerFont === "AlteHaasGrotesk"
+                    ? "border-[#47338a] bg-[#d2cce6] font-bold"
+                    : "border-gray-300 font-normal"
+                }`}
+              >
+                Simple
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -206,13 +243,15 @@ export default function Home() {
         <h2
           className="select-none"
           style={{
-            fontFamily: "DreamerTM",
+            fontFamily: timerFont,
             color: "#15183eff",
             fontSize: "14rem",
+            fontWeight: timerFont === "AlteHaasGrotesk" ? "bold" : "normal",
+            letterSpacing: timerFont === "AlteHaasGrotesk" ? "-0.05em" : "normal",
             textShadow: `
-                0 0 10px rgba(49, 36, 129, 0.7),
-                0 0 20px rgba(45, 31, 129, 0.6)
-              `,
+              0 0 10px rgba(49, 36, 129, 0.7),
+              0 0 20px rgba(45, 31, 129, 0.6)
+            `,
           }}
         >
           {minutes}:{seconds.toString().padStart(2, "0")}
